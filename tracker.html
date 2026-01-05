@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scholarship Application Tracker | StudentDesk</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- ===== STUDENTDESK HEADER ===== -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png">
+    </div>
+    <div class="back-btn" onclick="history.back()">← Back</div>
+</div>
+
+<!-- ===== PAGE TITLE ===== -->
+<div class="tracker-title">
+  Scholarship Application Tracker
+</div>
+
+<!-- ===== MAIN GRID ===== -->
+<div class="tracker-layout">
+
+<!-- ===== LEFT COLUMN ===== -->
+<div class="tracker-left">
+
+<!-- CARD -->
+<div class="tracker-card">
+  <div class="tracker-card-header">
+    <h3>Merit-Based Scholarship</h3>
+    <span class="percent-pill">75%</span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" style="width:75%"></div>
+  </div>
+
+  <div class="milestones">
+    <div class="milestone active">Documents Submitted</div>
+    <div class="milestone active">Eligibility Met</div>
+    <div class="milestone active">Under Review</div>
+    <div class="milestone">Final Approval</div>
+  </div>
+</div>
+
+<div class="tracker-card">
+  <div class="tracker-card-header">
+    <h3>Need-Based Grant</h3>
+    <span class="percent-pill">50%</span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" style="width:50%"></div>
+  </div>
+
+  <div class="milestones">
+    <div class="milestone active">Documents Submitted</div>
+    <div class="milestone active">Eligibility Met</div>
+    <div class="milestone danger">Action Required</div>
+    <div class="milestone">Final Approval</div>
+  </div>
+</div>
+
+<div class="tracker-card">
+  <div class="tracker-card-header">
+    <h3>STEM Excellence Award</h3>
+    <span class="percent-pill">100%</span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" style="width:100%"></div>
+  </div>
+
+  <div class="milestones">
+    <div class="milestone active">Documents Submitted</div>
+    <div class="milestone active">Eligibility Met</div>
+    <div class="milestone active">Under Review</div>
+    <div class="milestone active">Final Approval</div>
+  </div>
+</div>
+
+</div>
+
+<!-- ===== RIGHT COLUMN ===== -->
+<div class="tracker-right">
+
+<div class="alert danger">
+  <h4>Action Required</h4>
+  <p>Missing financial documents for Need-Based Grant. Upload by Dec 15.</p>
+</div>
+
+<div class="alert info">
+  <h4>Award Notification</h4>
+  <p>STEM Excellence Award approved.</p>
+</div>
+
+<div class="stats">
+  <h4>Application Statistics</h4>
+  <p>Total Applications <span>4</span></p>
+  <p>Approved <span class="green">1</span></p>
+  <p>Pending <span class="red">2</span></p>
+  <p>In Review <span>1</span></p>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

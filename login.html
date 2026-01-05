@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo-area">
+    <img src="assets/frame9.png">
+  </div>
+</div>
+
+<div class="login-page">
+<div class="login-card">
+
+<h2>Login</h2>
+
+<div class="login-field">
+<label>Email ID</label>
+<input type="email" id="emailInput" placeholder="College Email ID">
+</div>
+
+<div class="login-field password-field">
+    <label>Password</label>
+    <div class="password-wrap">
+        <input type="password" id="loginPassword" placeholder="••••••••">
+        <span class="eye">👁</span>
+    </div>
+</div>
+
+<div class="login-field">
+<label>Select Role</label>
+<select id="roleSelect">
+<option value="">Select Role</option>
+<option value="student">Student</option>
+<option value="faculty">Faculty</option>
+<option value="admin">Admin</option>
+</select>
+</div>
+
+<button class="login-btn" id="loginBtn">Login</button>
+
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKUqT8CBiz7c-j2ew91TBHPb9X0NzqpqE",
+  authDomain: "studentdesk-72aed.firebaseapp.com",
+  projectId: "studentdesk-72aed",
+  storageBucket: "studentdesk-72aed.appspot.com",
+  messagingSenderId: "619566592960",
+  appId: "1:619566592960:web:673d0f7cb3487689e84e25"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("emailInput").value;
+  const password = document.getElementById("loginPassword").value;
+  const role = document.getElementById("roleSelect").value;
+
+  if (!email || !password || !role) {
+    alert("Fill all fields");
+    return;
+  }
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    // Get role from Firestore
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (!snap.exists()) {
+      alert("No role data found");
+      return;
+    }
+
+    const savedRole = snap.data().role;
+
+    if (savedRole !== role) {
+      alert("Wrong role selected");
+      return;
+    }
+
+    if (role === "student") location.href = "studentdb.html";
+    if (role === "faculty") location.href = "facultydb.html";
+    if (role === "admin") location.href = "admindb.html";
+
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+
+</script>
+
+<script>
+const loginEye = document.querySelector(".password-field .eye");
+const loginPwd = document.getElementById("loginPassword");
+
+loginEye.addEventListener("click", () => {
+  if (loginPwd.type === "password") {
+    loginPwd.type = "text";
+    loginEye.textContent = "🙈";
+  } else {
+    loginPwd.type = "password";
+    loginEye.textContent = "👁";
+  }
+});
+</script>
+
+
+</body>
+</html>

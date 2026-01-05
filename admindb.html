@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png">
+    </div>
+    <div class="menu" id="adminMenuBtn">☰</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="admin-dashboard">
+
+    <h2 class="dashboard-title">Dashboard</h2>
+
+    <!-- TOP STATS -->
+    <div class="admin-stats">
+        <div class="admin-stat">Pending Request</div>
+        <div class="admin-stat">Active Applications</div>
+        <div class="admin-stat">Scholarship Application</div>
+        <div class="admin-stat">Rejected Application</div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="admin-grid">
+
+        <!-- Approval Tracker -->
+        <div class="admin-panel tracker">
+            <div class="panel-header">Approval Tracker</div>
+
+            <div class="tracker-row">
+                <span>Bonafide Certificate</span>
+                <button class="reviewBtn" data-file="student_document.pdf">Review</button>
+            </div>
+
+            <div class="tracker-row">
+                <span>Scholarship Applications</span>
+                <button class="reviewBtn" data-file="student_document.pdf">Review</button>
+            </div>
+
+            <div class="tracker-row">
+                <span>Internship Approval</span>
+                <button class="reviewBtn" data-file="student_document.pdf">Review</button>
+            </div>
+
+            <div class="tracker-row">
+                <span>HOD Approval</span>
+                <button class="reviewBtn" data-file="student_document.pdf">Review</button>
+            </div>
+
+        </div>
+
+        <!-- Scholarship Overview -->
+        <div class="admin-panel overview">
+            <div class="panel-header">Scholarship Overview</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+  document.querySelectorAll(".reviewBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const file = this.getAttribute("data-file");
+      window.open(file, "_blank");
+    });
+  });
+</script>
+
+<script>
+  document.getElementById("menuBtn").addEventListener("click", function () {
+    window.location.href = "admsidebar.html";
+  });
+</script>
+
+<!--sidebar-->
+
+<div id="adminSidebarContainer"></div>
+
+<script>
+fetch("admsidebar.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("adminSidebarContainer").innerHTML = html;
+  });
+</script>
+
+<script>
+document.getElementById("adminMenuBtn").onclick = function () {
+  document.querySelector(".admin-sidebar").classList.add("open");
+};
+</script>
+
+</body>
+</html>

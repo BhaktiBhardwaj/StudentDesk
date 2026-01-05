@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Settings | StudentDesk</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="topbar">
+  <div class="logo">
+    <img src="assets/frame9.png">
+  </div>
+  <div class="back-btn" onclick="history.back()">← Back</div>
+</div>
+
+<!-- Page -->
+<div class="settings-page">
+
+  <h1 class="settings-title">Settings</h1>
+
+  <div class="settings-grid">
+
+    <!-- Account Settings -->
+    <div class="settings-card">
+      <div class="settings-card-title">Account Settings</div>
+      <div class="settings-box">
+        <div class="settings-item" onclick="location.href='comingsoon.html'">Edit Profile</div>
+        <div class="settings-item" onclick="location.href='comingsoon.html'">Change Password</div>
+      </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="settings-card">
+      <div class="settings-card-title">Notification Settings</div>
+      <div class="settings-box">
+        <div class="settings-row">
+          <span>Notification</span>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="settings-row" onclick="location.href='comingsoon.html'">
+          <span>Notification Preference</span>
+        </div>
+        <div class="settings-row">
+          <span>Email Notifications</span>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy -->
+    <div class="settings-card">
+      <div class="settings-card-title">Privacy & Security</div>
+      <div class="settings-box">
+        <div class="settings-row">
+          <span>Two-factor authentication</span>
+          <div class="toggle" onclick="toggleSwitch(this)"></div>
+        </div>
+        <div class="settings-row" onclick="location.href='privacypolicy.html'">
+          <span>Privacy Policy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="settings-card">
+      <div class="settings-card-title">Contact us</div>
+      <div class="settings-box">
+        <div class="contact-item">📧 support@studentdesk.com</div>
+        <div class="contact-item">📞 +91 12345-xxxxx</div>
+        <div class="contact-item">📍 X Floor, XYZ Building, MY Road, ABC</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function toggleSwitch(el){
+  el.classList.toggle("active");
+}
+</script>
+
+</body>
+</html>

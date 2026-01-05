@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FAQs | StudentDesk</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+    <div class="logo">
+        <img src="assets/frame9.png">
+    </div>
+    <div class="back-btn" onclick="history.back()">← Back</div>
+</div>
+
+<!-- FAQ Container -->
+<div class="faq-page">
+
+    <div class="faq-card">
+
+        <h1 class="faq-title">Frequently Asked Questions</h1>
+
+        <!-- Search Bar -->
+        <div class="faq-search">
+            <input type="text" placeholder="Search questions...">
+            <div class="faq-search-btn">
+                🔍
+            </div>
+        </div>
+
+        <!-- FAQ Content Box -->
+        <div class="faq-content" id="faqContent"></div>
+
+    </div>
+
+</div>
+
+<script>
+let faqData = [];
+
+fetch("assets/faqs.csv")
+  .then(res => res.text())
+  .then(csv => {
+    const lines = csv.split("\n").slice(1);
+    faqData = lines.map(line => {
+      const [id, question, answer, category] = line.split(",");
+      return { question, answer, category };
+    });
+    renderFAQs(faqData);
+  });
+
+function renderFAQs(data) {
+  const container = document.getElementById("faqContent");
+  container.innerHTML = "";
+
+  data.forEach((item, index) => {
+    if (!item.question || !item.answer) return;
+
+    container.innerHTML += `
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(${index})">
+          ${item.question}
+          <span class="arrow">+</span>
+        </button>
+        <div class="faq-answer" id="faq-${index}">
+          ${item.answer}
+        </div>
+      </div>
+    `;
+  });
+}
+
+function toggleFAQ(index) {
+  const answer = document.getElementById(`faq-${index}`);
+  const arrow = answer.previousElementSibling.querySelector(".arrow");
+
+  const isOpen = answer.style.maxHeight;
+
+  document.querySelectorAll(".faq-answer").forEach(a => {
+    a.style.maxHeight = null;
+    a.previousElementSibling.querySelector(".arrow").textContent = "+";
+  });
+
+  if (!isOpen) {
+    answer.style.maxHeight = answer.scrollHeight + "px";
+    arrow.textContent = "−";
+  }
+}
+
+// Search
+document.querySelector(".faq-search input").addEventListener("input", e => {
+  const term = e.target.value.toLowerCase();
+  const filtered = faqData.filter(f =>
+    f.question.toLowerCase().includes(term)
+  );
+  renderFAQs(filtered);
+});
+</script>
+
+</body>
+</html>

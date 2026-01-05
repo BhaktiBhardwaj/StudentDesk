@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StudentDesk | Sign-Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER (same as your UI) -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png" alt="StudentDesk Logo">
+    </div>
+</div>
+
+<!-- PAGE BACKGROUND -->
+<div class="signup-page">
+
+    <!-- SIGNUP CARD -->
+    <div class="signup-card">
+
+        <h2 class="signup-title">Sign-Up</h2>
+
+        <!-- FORM GRID -->
+        <div class="signup-grid">
+
+            <!-- Name -->
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" placeholder="Full Name">
+            </div>
+
+            <!-- Role -->
+            <div class="field-group">
+                <label>Role</label>
+                <select id="role">
+                    <option value="">Select Role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+
+            <!-- Email -->
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" id="emailInput" placeholder="College Email ID">
+            </div>
+
+            <!-- Password -->
+            <div class="field-group password-group">
+                <label>Password</label>
+                <input type="password" placeholder="Password">
+                <span class="eye">👁</span>
+            </div>
+
+            <!-- Sem / Year -->
+            <div class="field-group">
+                <label>Sem/Year</label>
+                <input type="text" placeholder="Optional">
+            </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="signup-actions">
+            <button class="signup-btn" id="signupBtn">Sign Up</button>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!--BACKEND-->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKUqT8CBiz7c-j2ew91TBHPb9X0NzqpqE",
+  authDomain: "studentdesk-72aed.firebaseapp.com",
+  projectId: "studentdesk-72aed",
+  storageBucket: "studentdesk-72aed.appspot.com",
+  messagingSenderId: "619566592960",
+  appId: "1:619566592960:web:29453ec760314bc1e84e25"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// UI elements
+const signupBtn = document.getElementById("signupBtn");
+const roleSelect = document.getElementById("role");
+const emailInput = document.getElementById("emailInput");
+const nameInput = document.querySelector("input[placeholder='Full Name']");
+const passwordInput = document.querySelector("input[placeholder='Password']");
+const semInput = document.querySelector("input[placeholder='Optional']");
+
+signupBtn.addEventListener("click", async () => {
+  const email = emailInput.value;
+  const password = passwordInput.value;
+  const role = roleSelect.value;
+  const name = nameInput.value;
+  const sem = semInput.value;
+
+  if (!email || !password || !role || !name) {
+    alert("Please fill all required fields");
+    return;
+  }
+
+  try {
+    // Create Firebase account
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    // Save profile in Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      name,
+      email,
+      role,
+      sem,
+      createdAt: new Date()
+    });
+
+    // Redirect
+    if (role === "student") window.location.href = "studentdb.html";
+    if (role === "faculty") window.location.href = "facultydb.html";
+    if (role === "admin") window.location.href = "admindb.html";
+
+  } catch (error) {
+    alert(error.message);
+    console.error(error);
+  }
+});
+// 👁 Show / Hide Password
+const eyeIcon = document.querySelector(".eye");
+const pwdInput = document.querySelector(".password-group input");
+
+if (eyeIcon && pwdInput) {
+  eyeIcon.addEventListener("click", () => {
+    if (pwdInput.type === "password") {
+      pwdInput.type = "text";
+      eyeIcon.textContent = "🙈";
+    } else {
+      pwdInput.type = "password";
+      eyeIcon.textContent = "👁";
+    }
+  });
+}
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

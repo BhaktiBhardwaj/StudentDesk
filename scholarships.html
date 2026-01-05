@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scholarship Opportunities | StudentDesk</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="topbar">
+  <div class="logo">
+    <img src="assets/frame9.png">
+  </div>
+  <div class="profile-icons">
+    <div class="back-btn" onclick="history.back()">← Back</div>
+  </div>
+</div>
+
+<div class="scholarship-page">
+  <h1 class="page-title">Scholarship Opportunities</h1>
+  <div class="scholarship-grid" id="scholarshipGrid"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKUqT8CBiz7c-j2ew91TBHPb9X0NzqpqE",
+  authDomain: "studentdesk-72aed.firebaseapp.com",
+  projectId: "studentdesk-72aed",
+  storageBucket: "studentdesk-72aed.appspot.com",
+  messagingSenderId: "619566592960",
+  appId: "1:619566592960:web:673d0f7cb3487689e84e25"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+  loadScholarships();
+});
+
+async function loadScholarships() {
+  const snap = await getDocs(collection(db, "scholarships"));
+  const grid = document.getElementById("scholarshipGrid");
+
+  grid.innerHTML = "";
+
+  snap.forEach(docx => {
+    const d = docx.data();
+    const tags = (d.tags || []).map(t => `<span>${t}</span>`).join("");
+
+    grid.innerHTML += `
+      <div class="scholarship-card">
+        <h3>${d.title}</h3>
+        <p class="label">Eligibility</p>
+
+        <div class="tags">
+          ${tags}
+          <div class="deadline">⏰</div>
+        </div>
+
+        <span class="deadline-pill">${d.deadline || ""}</span>
+
+        <button onclick="openWebsite('${d.website}')">
+          Apply on Official Site
+        </button>
+      </div>
+    `;
+  });
+}
+
+window.openWebsite = (url) => {
+  if (!url) {
+    alert("Official website not available for this scholarship.");
+    return;
+  }
+  window.open(url, "_blank");
+};
+</script>
+
+</body>
+</html>

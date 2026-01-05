@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | Logout</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png">
+    </div>
+</div>
+
+<!-- BACKGROUND -->
+<div class="logout-bg">
+
+    <!-- MODAL -->
+    <div class="logout-modal">
+
+        <div class="warning-icon">!</div>
+
+        <h2>Do you want to Log Out?</h2>
+        <p>You will be logged out of your account</p>
+
+        <div class="divider"></div>
+
+        <div class="logout-actions">
+            <button class="cancel-btn">Cancel</button>
+            <button class="confirm-btn">Log Out</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKUqT8CBiz7c-j2ew91TBHPb9X0NzqpqE",
+  authDomain: "studentdesk-72aed.firebaseapp.com",
+  projectId: "studentdesk-72aed",
+  storageBucket: "studentdesk-72aed.firebasestorage.app",
+  messagingSenderId: "619566592960",
+  appId: "1:619566592960:web:673d0f7cb3487689e84e25"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.addEventListener("DOMContentLoaded", () => {
+  const confirmBtn = document.querySelector(".confirm-btn");
+  const cancelBtn = document.querySelector(".cancel-btn");
+
+  if (!confirmBtn || !cancelBtn) {
+    console.error("Logout buttons not found");
+    return;
+  }
+
+  // Cancel → back to dashboard
+  cancelBtn.onclick = () => {
+    window.history.back();
+  };
+
+  // Confirm → sign out + go to home
+  confirmBtn.onclick = async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "index.html";
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+});
+</script>
+
+
+</body>
+</html>

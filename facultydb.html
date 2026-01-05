@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | Faculty Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png">
+    </div>
+    <div class="menu" id="facultyMenuBtn">☰</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+    <h2 class="dashboard-title">Dashboard</h2>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row">
+        <div class="stat-card">Total Applications</div>
+        <div class="stat-card">Pending Applications</div>
+        <div class="stat-card">Verified Applications</div>
+        <div class="stat-card">Rejected Applications</div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="dashboard-grid">
+
+        <div class="panel large">
+            <h3>Student Applications</h3>
+        </div>
+
+        <div class="side-panels">
+            <div class="panel">
+                <h3>Recent Activity</h3>
+            </div>
+
+            <div class="panel">
+                <h3>Reports and Analytics</h3>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="facultySidebarContainer"></div>
+
+<script>
+fetch("facsidebar.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("facultySidebarContainer").innerHTML = html;
+  });
+</script>
+
+<script>
+document.getElementById("facultyMenuBtn").onclick = function () {
+  document.querySelector(".faculty-sidebar").classList.add("open");
+};
+</script>
+
+
+</body>
+</html>

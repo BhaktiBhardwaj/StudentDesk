@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | My Profile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area"><img src="assets/frame9.png"></div>
+  <div class="back-btn" onclick="history.back()">← Back</div>
+</div>
+
+<div class="profile-header">
+  <label class="profile-pic">
+    <input type="file" id="photoInput" hidden>
+    <img id="profilePhoto" src="assets/avatar.png">
+  </label>
+
+  <div class="profile-basic">
+    <h2>My Profile</h2>
+    <div id="profileName"></div>
+    <div id="profileEmail"></div>
+  </div>
+</div>
+
+<div class="info-section">
+  <div class="section-title">Personal Information</div>
+  <div class="info-grid">
+    <div>Name:</div><div id="nameField"></div>
+    <div>DOB:</div><div id="dobField"></div>
+    <div>Email:</div><div id="emailField"></div>
+    <div>Phone:</div><div id="phoneField"></div>
+    <div>Student ID:</div><div id="idField"></div>
+    <div>Address:</div><div id="addressField"></div>
+  </div>
+</div>
+
+<div class="info-section">
+  <div class="section-title">Academic Information</div>
+  <div class="info-grid">
+    <div>Course:</div><div id="courseField"></div>
+    <div>Section:</div><div id="sectionField"></div>
+    <div>Year:</div><div id="yearField"></div>
+    <div>CGPA:</div><div id="cgpaField"></div>
+    <div>Branch:</div><div id="branchField"></div>
+  </div>
+</div>
+
+<div style="text-align:center;margin:40px">
+  <button class="edit-profile-btn" onclick="openEdit()">✏ Edit Profile</button>
+</div>
+
+<div class="edit-modal" id="editModal">
+  <div class="edit-card">
+    <h3>Edit Profile</h3>
+    <input id="editDob" type="date">
+    <input id="editPhone" placeholder="Phone">
+    <input id="editAddress" placeholder="Address">
+    <input id="editId" placeholder="Student ID">
+    <input id="editCourse" placeholder="Course">
+    <input id="editBranch" placeholder="Branch">
+    <input id="editSection" placeholder="Section">
+
+    <select id="editYear">
+      <option value="">Select Year</option>
+      <option>1</option><option>2</option><option>3</option><option>4</option>
+    </select>
+
+    <input id="editCgpa" placeholder="CGPA">
+    <button id="saveBtn">Save</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyBKUqT8CBiz7c-j2ew91TBHPb9X0NzqpqE",
+  authDomain: "studentdesk-72aed.firebaseapp.com",
+  projectId: "studentdesk-72aed",
+  storageBucket: "studentdesk-72aed.appspot.com",
+  messagingSenderId: "619566592960",
+  appId: "1:619566592960:web:673d0f7cb3487689e84e25"
+});
+
+const photoInput = document.getElementById("photoInput");
+const profilePhoto = document.getElementById("profilePhoto");
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+let currentUser;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) location.href="login.html";
+  currentUser = user;
+
+  const snap = await getDoc(doc(db,"users",user.uid));
+  const d = snap.data();
+
+  profileName.textContent = d.name;
+  profileEmail.textContent = d.email;
+
+  nameField.textContent = d.name;
+  emailField.textContent = d.email;
+  dobField.textContent = d.dob || "-";
+  phoneField.textContent = d.phone || "-";
+  idField.textContent = d.studentId || "-";
+  addressField.textContent = d.address || "-";
+  courseField.textContent = d.course || "-";
+  sectionField.textContent = d.section || "-";
+  yearField.textContent = d.year || "-";
+  cgpaField.textContent = d.cgpa || "-";
+  branchField.textContent = d.branch || "-";
+
+  if(d.photo) profilePhoto.src = d.photo;
+
+  editDob.value = d.dob || "";
+  editPhone.value = d.phone || "";
+  editAddress.value = d.address || "";
+  editId.value = d.studentId || "";
+  editCourse.value = d.course || "";
+  editBranch.value = d.branch || "";
+  editSection.value = d.section || "";
+  editYear.value = d.year || "";
+  editCgpa.value = d.cgpa || "";
+});
+
+window.openEdit = () => editModal.style.display="flex";
+
+saveBtn.onclick = async () => {
+  await updateDoc(doc(db,"users",currentUser.uid),{
+    dob:editDob.value,
+    phone:editPhone.value,
+    address:editAddress.value,
+    studentId:editId.value,
+    course:editCourse.value,
+    branch:editBranch.value,
+    section:editSection.value,
+    year:editYear.value,
+    cgpa:editCgpa.value
+  });
+  location.reload();
+};
+
+photoInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    profilePhoto.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+</script>
+
+</body>
+</html>

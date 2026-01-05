@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>StudentDesk | AI ChatBot</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-area">
+        <img src="assets/frame9.png">
+    </div>
+    <div class="back-btn" onclick="history.back()">← Back</div>
+</div>
+
+<!-- MAIN AREA -->
+<div class="chatbot-page">
+
+    <!-- LEFT SIDEBAR -->
+    <div class="chat-sidebar">
+
+        <button class="side-btn">New Chat</button>
+        <button class="side-btn">Chat History ▼</button>
+
+        <div class="sidebar-space"></div>
+
+        <button class="side-btn danger">🗑 Clear History</button>
+
+    </div>
+
+    <!-- CHAT PANEL -->
+    <div class="chat-panel">
+
+        <div class="chat-header">
+            💬 AI ChatBot
+        </div>
+
+        <div class="chat-area" id="chatArea"></div>
+
+        <!-- INPUT -->
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type your message here">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <!-- SUGGESTED -->
+        <div class="suggested">
+            <div class="suggested-title">Suggested Questions</div>
+
+            <div class="suggested-row">
+                <div class="suggested-box"></div>
+                <div class="suggested-box"></div>
+                <div class="suggested-box"></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+let KB = [];
+
+// Load CSV
+fetch("assets/chatbot.csv")
+.then(res => res.text())
+.then(text => {
+    const rows = text.trim().split("\n").slice(1);
+
+    rows.forEach(row => {
+        let parts = row.includes("|") 
+            ? row.split("|").map(x => x.trim()) 
+            : row.split(",");
+
+        KB.push({
+            keyword: parts[1].toLowerCase(),
+            response: parts[2]
+        });
+    });
+
+    console.log("Knowledge base loaded:", KB.length);
+});
+
+// Add messages to UI
+function addUserMessage(text){
+    const area = document.getElementById("chatArea");
+    area.innerHTML += `<div class="user-msg">${text}</div>`;
+    area.scrollTop = area.scrollHeight;
+}
+
+function addBotMessage(text){
+    const area = document.getElementById("chatArea");
+    area.innerHTML += `<div class="bot-msg">${text}</div>`;
+    area.scrollTop = area.scrollHeight;
+}
+
+// Find best answer
+function getAnswer(query){
+    const q = query.toLowerCase();
+
+    for(let item of KB){
+        if(q.includes(item.keyword)){
+            return item.response;
+        }
+    }
+
+    return "I couldn't find an answer for that. Try asking about scholarship, status, documents or eligibility.";
+}
+
+// Main send function
+function sendMessage(){
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if(!text) return;
+
+    addUserMessage(text);
+    input.value = "";
+
+    setTimeout(()=>{
+        const reply = getAnswer(text);
+        addBotMessage(reply);
+    }, 600);
+}
+</script>
+<script>
+const chatArea = document.querySelector(".chat-area");
+const input = document.querySelector(".chat-input input");
+const sendBtn = document.querySelector(".chat-input button");
+
+sendBtn.onclick = sendMessage;
+input.addEventListener("keypress", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
+function addMessage(text, sender){
+  const div = document.createElement("div");
+  div.className = sender === "user" ? "chat-user" : "chat-bot";
+  div.textContent = text;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+async function sendMessage(){
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  addMessage(msg,"user");
+  input.value="";
+
+  const res = await fetch("http://localhost:3000/chat",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+  addMessage(data.reply,"bot");
+}
+</script>
+</body>
+</html>
