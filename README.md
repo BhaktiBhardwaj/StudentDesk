@@ -1,2 +1,4 @@
 # StudentDesk
 StudentDesk - Your one stop academic help desk.
+
+StudentDesk is a smart, scholarship-focused web solution designed especially for college students  to easily find and understand scholarship opportunities. The platform provides a dedicated scholarship section where students can view available schemes along with eligibility, required documents, deadlines, and benefits. To reduce confusion and common doubts, StudentDesk includes a well-structured FAQs section that answers basic questions related to academics. In addition, an AI chatbot is integrated to provide instant responses to student queries, guide them step by step, and help them on their queries. This solution saves time, improves awareness, and makes the scholarship application process simple and stress-free for students and academic staff .
